@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Spot-fix</title>
+
+    <!-- Leaflet Map -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- PHONE STATUS BAR -->
+    <div class="status-bar">
+
+        <span class="status-time" id="statusTime">9:41</span>
+
+        <div class="status-icons">
+
+            <svg viewBox="0 0 20 14" width="19" height="13" fill="currentColor"><rect x="0" y="9" width="3" height="5" rx="0.5"/><rect x="5.5" y="6" width="3" height="8" rx="0.5"/><rect x="11" y="3" width="3" height="11" rx="0.5"/><rect x="16.5" y="0" width="3" height="14" rx="0.5"/></svg>
+
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9a10 10 0 0 1 16 0"/><path d="M7 12.5a6 6 0 0 1 10 0"/><path d="M10.5 16a2 2 0 0 1 3 0"/></svg>
+
+            <div class="status-battery">
+                <span>82%</span>
+                <svg viewBox="0 0 26 14" width="24" height="13" fill="none"><rect x="0.75" y="0.75" width="21" height="12.5" rx="3" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="2.5" width="15" height="9" rx="1.6" fill="currentColor"/><rect x="23" y="4.5" width="2.2" height="5" rx="1" fill="currentColor"/></svg>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="header-left">
+
+            <button class="icon-button menu-button" onclick="openMenu()" aria-label="Open menu">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+            </button>
+
+            <div class="logo">
+                <div class="logo-pin" aria-hidden="true"></div>
+                <span>Spot<b>-fix</b></span>
+            </div>
+
+        </div>
+
+        <button class="icon-button notification" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span>3</span>
+        </button>
+
+    </header>
+
+
+    <!-- GREETING -->
+    <section class="greeting">
+
+        <h1>
+            Hello, Citizen! <span class="wave">👋</span>
+        </h1>
+
+        <p>
+            Let's make our city better together.
+        </p>
+
+    </section>
+
+
+    <!-- MAP -->
+    <section class="map-container">
+
+        <div id="map"></div>
+
+        <button
+            class="location-button"
+            onclick="getUserLocation()"
+            title="Use my location"
+            aria-label="Use my location">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M22 12h-3M5 12H2"/></svg>
+        </button>
+
+    </section>
+
+
+    <!-- REPORT BUTTON -->
+    <button class="report-button" onclick="openReport()">
+
+        <div class="plus">
+            +
+        </div>
+
+        <div class="report-text">
+
+            <strong>
+                Report Issue
+            </strong>
+
+            <small>
+                Tap to report a civic issue
+            </small>
+
+        </div>
+
+        <div class="arrow">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+
+    </button>
+
+
+    <!-- ISSUE CATEGORIES -->
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                Issue Categories
+            </h2>
+
+            <button onclick="showAllCategories()">
+                View All
+            </button>
+
+        </div>
+
+
+        <div class="categories">
+
+            <button
+                class="category"
+                onclick="selectIssue('Pothole')">
+
+                <div class="category-icon pothole">
+                    ⚠️
+                </div>
+
+                <span>
+                    Pothole
+                </span>
+
+            </button>
+
+
+            <button
+                class="category"
+                onclick="selectIssue('Garbage')">
+
+                <div class="category-icon garbage">
+                    🗑️
+                </div>
+
+                <span>
+                    Garbage
+                </span>
+
+            </button>
+
+
+            <button
+                class="category"
+                onclick="selectIssue('Streetlight')">
+
+                <div class="category-icon streetlight">
+                    💡
+                </div>
+
+                <span>
+                    Streetlight
+                </span>
+
+            </button>
+
+
+            <button
+                class="category"
+                onclick="selectIssue('Other')">
+
+                <div class="category-icon other">
+                    🛠️
+                </div>
+
+                <span>
+                    Others
+                </span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- RADIUS -->
+    <section class="radius-section">
+
+        <label for="radius">
+            Show issues within
+        </label>
+
+        <select id="radius" onchange="changeRadius()">
+
+            <option value="500">
+                500 meters
+            </option>
+
+            <option value="1000" selected>
+                1 kilometer
+            </option>
+
+            <option value="2000">
+                2 kilometers
+            </option>
+
+            <option value="5000">
+                5 kilometers
+            </option>
+
+        </select>
+
+    </section>
+
+
+    <!-- RECENT ISSUES -->
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                Recent Issues Nearby
+            </h2>
+
+            <button onclick="showAllIssues()">
+                View All
+            </button>
+
+        </div>
+
+
+        <div class="issues">
+
+
+            <!-- ISSUE 1 -->
+            <div class="issue-card">
+
+                <img
+                    src="https://images.unsplash.com/photo-1516939884455-1445c8652f83?auto=format&fit=crop&w=300&q=80"
+                    alt="Pothole">
+
+                <div class="issue-info">
+
+                    <div class="issue-title">
+                        Pothole on MG Road
+                    </div>
+
+                    <div class="issue-meta">
+                        📍 120 m away
+                    </div>
+
+                </div>
+
+                <div class="issue-right">
+
+                    <span class="status pending">
+                        Pending
+                    </span>
+
+                    <small>
+                        2h ago
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- ISSUE 2 -->
+            <div class="issue-card">
+
+                <img
+                    src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=300&q=80"
+                    alt="Garbage">
+
+                <div class="issue-info">
+
+                    <div class="issue-title">
+                        Garbage Overflow
+                    </div>
+
+                    <div class="issue-meta">
+                        📍 350 m away
+                    </div>
+
+                </div>
+
+                <div class="issue-right">
+
+                    <span class="status progress">
+                        In Progress
+                    </span>
+
+                    <small>
+                        4h ago
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- ISSUE 3 -->
+            <div class="issue-card">
+
+                <img
+                    src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=300&q=80"
+                    alt="Streetlight">
+
+                <div class="issue-info">
+
+                    <div class="issue-title">
+                        Streetlight Not Working
+                    </div>
+
+                    <div class="issue-meta">
+                        📍 500 m away
+                    </div>
+
+                </div>
+
+                <div class="issue-right">
+
+                    <span class="status resolved">
+                        Resolved
+                    </span>
+
+                    <small>
+                        1d ago
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+
+        <button class="nav-item active" onclick="navigate('home')">
+
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+            </span>
+
+            <span>
+                Home
+            </span>
+
+        </button>
+
+
+        <button class="nav-item" onclick="navigate('map')">
+
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            </span>
+
+            <span>
+                Map
+            </span>
+
+        </button>
+
+
+        <button class="nav-item" onclick="location.href='reports.html'">
+
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v3H9z"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="16" y2="15"/></svg>
+            </span>
+
+            <span>
+                My Reports
+            </span>
+
+        </button>
+
+
+        <button class="nav-item" onclick="location.href='profile.html'">
+
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+            </span>
+
+            <span>
+                Profile
+            </span>
+
+        </button>
+
+    </nav>
+
+</div>
+
+
+<!-- REPORT MODAL -->
+
+<div class="modal" id="reportModal">
+
+    <div class="modal-content">
+
+        <button
+            class="close-button"
+            onclick="closeReport()"
+            aria-label="Close">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+        </button>
+
+        <h2>
+            Report an Issue
+        </h2>
+
+        <p>
+            Help improve your local area.
+        </p>
+
+
+        <label>
+            Issue Type
+        </label>
+
+        <select id="issueType">
+
+            <option>
+                Pothole
+            </option>
+
+            <option>
+                Garbage
+            </option>
+
+            <option>
+                Streetlight
+            </option>
+
+            <option>
+                Other
+            </option>
+
+        </select>
+
+
+        <label>
+            Description
+        </label>
+
+        <textarea
+            id="description"
+            placeholder="Describe the issue...">
+        </textarea>
+
+
+        <label>
+            Location
+        </label>
+
+        <button
+            class="location-input"
+            onclick="getUserLocation()">
+
+            📍 Use My Location
+
+        </button>
+
+
+        <button
+            class="submit-button"
+            onclick="submitReport()">
+
+            Submit Report
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- Leaflet JS -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
