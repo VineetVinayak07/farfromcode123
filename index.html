@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CivicEye AI</title>
+
+    <!-- Leaflet Map -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <button class="icon-button menu-button" onclick="openMenu()">
+            ☰
+        </button>
+
+        <div class="logo">
+            <div class="logo-pin">●</div>
+            <span>CivicEye <b>AI</b></span>
+        </div>
+
+        <button class="icon-button notification">
+            ♧
+            <span>3</span>
+        </button>
+
+    </header>
+
+
+    <!-- GREETING -->
+    <section class="greeting">
+
+        <h1>
+            Hello, Citizen! 👋
+        </h1>
+
+        <p>
+            Let's make our city better together.
+        </p>
+
+    </section>
+
+
+    <!-- MAP -->
+    <section class="map-container">
+
+        <div id="map"></div>
+
+        <button
+            class="location-button"
+            onclick="getUserLocation()"
+            title="Use my location">
+            ◎
+        </button>
+
+    </section>
+
+
+    <!-- REPORT BUTTON -->
+    <button class="report-button" onclick="openReport()">
+
+        <div class="plus">
+            +
+        </div>
+
+        <div class="report-text">
+
+            <strong>
+                Report Issue
+            </strong>
+
+            <small>
+                Tap to report a civic issue
+            </small>
+
+        </div>
+
+        <div class="arrow">
+            →
+        </div>
+
+    </button>
+
+
+    <!-- ISSUE CATEGORIES -->
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                Issue Categories
+            </h2>
+
+            <button onclick="showAllCategories()">
+                View All
+            </button>
+
+        </div>
+
+
+        <div class="categories">
+
+            <button
+                class="category"
+                onclick="selectIssue('Pothole')">
+
+                <div class="category-icon pothole">
+                    ⚠
+                </div>
+
+                <span>
+                    Pothole
+                </span>
+
+            </button>
+
+
+            <button
+                class="category"
+                onclick="selectIssue('Garbage')">
+
+                <div class="category-icon garbage">
+                    🗑
+                </div>
+
+                <span>
+                    Garbage
+                </span>
+
+            </button>
+
+
+            <button
+                class="category"
+                onclick="selectIssue('Streetlight')">
+
+                <div class="category-icon streetlight">
+                    ⚑
+                </div>
+
+                <span>
+                    Streetlight
+                </span>
+
+            </button>
+
+
+            <button
+                class="category"
+                onclick="selectIssue('Other')">
+
+                <div class="category-icon other">
+                    ✦
+                </div>
+
+                <span>
+                    Others
+                </span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- RADIUS -->
+    <section class="radius-section">
+
+        <label for="radius">
+            Show issues within
+        </label>
+
+        <select id="radius" onchange="changeRadius()">
+
+            <option value="500">
+                500 meters
+            </option>
+
+            <option value="1000" selected>
+                1 kilometer
+            </option>
+
+            <option value="2000">
+                2 kilometers
+            </option>
+
+            <option value="5000">
+                5 kilometers
+            </option>
+
+        </select>
+
+    </section>
+
+
+    <!-- RECENT ISSUES -->
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                Recent Issues Nearby
+            </h2>
+
+            <button onclick="showAllIssues()">
+                View All
+            </button>
+
+        </div>
+
+
+        <div class="issues">
+
+
+            <!-- ISSUE 1 -->
+            <div class="issue-card">
+
+                <img
+                    src="https://images.unsplash.com/photo-1516939884455-1445c8652f83?auto=format&fit=crop&w=300&q=80"
+                    alt="Pothole">
+
+                <div class="issue-info">
+
+                    <div class="issue-title">
+                        Pothole on MG Road
+                    </div>
+
+                    <div class="issue-meta">
+                        📍 120 m away
+                    </div>
+
+                </div>
+
+                <div class="issue-right">
+
+                    <span class="status pending">
+                        Pending
+                    </span>
+
+                    <small>
+                        2h ago
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- ISSUE 2 -->
+            <div class="issue-card">
+
+                <img
+                    src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=300&q=80"
+                    alt="Garbage">
+
+                <div class="issue-info">
+
+                    <div class="issue-title">
+                        Garbage Overflow
+                    </div>
+
+                    <div class="issue-meta">
+                        📍 350 m away
+                    </div>
+
+                </div>
+
+                <div class="issue-right">
+
+                    <span class="status progress">
+                        In Progress
+                    </span>
+
+                    <small>
+                        4h ago
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- ISSUE 3 -->
+            <div class="issue-card">
+
+                <img
+                    src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=300&q=80"
+                    alt="Streetlight">
+
+                <div class="issue-info">
+
+                    <div class="issue-title">
+                        Streetlight Not Working
+                    </div>
+
+                    <div class="issue-meta">
+                        📍 500 m away
+                    </div>
+
+                </div>
+
+                <div class="issue-right">
+
+                    <span class="status resolved">
+                        Resolved
+                    </span>
+
+                    <small>
+                        1d ago
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+
+        <button class="nav-item active" onclick="navigate('home')">
+
+            <span class="nav-icon">
+                ⌂
+            </span>
+
+            <span>
+                Home
+            </span>
+
+        </button>
+
+
+        <button class="nav-item" onclick="navigate('map')">
+
+            <span class="nav-icon">
+                ◈
+            </span>
+
+            <span>
+                Map
+            </span>
+
+        </button>
+
+
+        <button class="nav-item" onclick="navigate('reports')">
+
+            <span class="nav-icon">
+                ▤
+            </span>
+
+            <span>
+                My Reports
+            </span>
+
+        </button>
+
+
+        <button class="nav-item" onclick="navigate('profile')">
+
+            <span class="nav-icon">
+                ♙
+            </span>
+
+            <span>
+                Profile
+            </span>
+
+        </button>
+
+    </nav>
+
+</div>
+
+
+<!-- REPORT MODAL -->
+
+<div class="modal" id="reportModal">
+
+    <div class="modal-content">
+
+        <button
+            class="close-button"
+            onclick="closeReport()">
+            ×
+        </button>
+
+        <h2>
+            Report an Issue
+        </h2>
+
+        <p>
+            Help improve your local area.
+        </p>
+
+
+        <label>
+            Issue Type
+        </label>
+
+        <select id="issueType">
+
+            <option>
+                Pothole
+            </option>
+
+            <option>
+                Garbage
+            </option>
+
+            <option>
+                Streetlight
+            </option>
+
+            <option>
+                Other
+            </option>
+
+        </select>
+
+
+        <label>
+            Description
+        </label>
+
+        <textarea
+            id="description"
+            placeholder="Describe the issue...">
+        </textarea>
+
+
+        <label>
+            Location
+        </label>
+
+        <button
+            class="location-input"
+            onclick="getUserLocation()">
+
+            📍 Use My Location
+
+        </button>
+
+
+        <button
+            class="submit-button"
+            onclick="submitReport()">
+
+            Submit Report
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- Leaflet JS -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
